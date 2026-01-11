@@ -130,22 +130,65 @@ NPU 2: voltage 750 mV, clock 1000 MHz, temperature 47'C
 =======================================================
 ```
 
+## Running AI Demos with Camera
+
+After installing the drivers and runtime, you can run AI inference demos using a USB camera:
+
+```bash
+# Transfer the DX-APP package to the board
+scp dx_app_arm64.tar.gz root@<board-ip>:/tmp/
+
+# On the board
+cd /tmp
+tar xzf dx_app_arm64.tar.gz
+cd dx_app_package
+
+# Start the dxrtd service
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+nohup /usr/local/bin/dxrtd > /tmp/dxrtd.log 2>&1 &
+
+# Run camera inference
+./run_camera_inference.sh
+```
+
+### Available Models
+
+| Model | Type | Description |
+|-------|------|-------------|
+| YOLOv7 | Object Detection | 80 classes (COCO) |
+| YOLOv8N | Object Detection | Fast, lightweight |
+| YOLOv5S | Object Detection | Balanced speed/accuracy |
+| YOLOv5S_Face | Face Detection | Optimized for faces |
+| YOLOV5Pose | Pose Estimation | Human keypoints |
+| DeepLabV3+ | Segmentation | Semantic segmentation |
+
+### Single Image Inference
+
+```bash
+# Capture a frame from camera
+gst-launch-1.0 v4l2src device=/dev/video2 num-buffers=1 ! videoconvert ! jpegenc ! filesink location=/tmp/frame.jpg
+
+# Run inference
+cd /tmp/dx_app_package
+export LD_LIBRARY_PATH=/tmp/dx_app_package/lib:/usr/local/lib:$LD_LIBRARY_PATH
+./bin/yolo -m assets/models/YoloV7.dxnn -p 4 -i /tmp/frame.jpg --fps_only
+```
+
 ## Repository Structure
 
 ```
 iMDT-DEEPX-AI-SBC/
 ├── README.md                 # This file
 ├── build.sh                  # Main build script (host PC)
+├── build.cmd                 # Windows build script
 ├── deploy.sh                 # Deploy to board script
 ├── docker/
 │   ├── Dockerfile.drivers    # Docker image for driver compilation
-│   └── Dockerfile.runtime    # Docker image for runtime compilation
-├── drivers/
-│   ├── build-drivers.sh      # Build drivers script
-│   └── install-drivers.sh    # Install drivers on board
-├── runtime/
-│   ├── build-runtime.sh      # Build runtime script
-│   └── install-runtime.sh    # Install runtime on board
+│   ├── Dockerfile.runtime    # Docker image for runtime compilation
+│   └── Dockerfile.dxapp      # Docker image for DX-APP compilation
+├── scripts/
+│   ├── build-dxapp.sh        # Build DX-APP demos
+│   └── run_camera_inference.sh # Camera inference script
 ├── board/
 │   └── install.sh            # All-in-one installer for board
 └── docs/
