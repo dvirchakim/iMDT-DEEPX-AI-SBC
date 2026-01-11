@@ -1,0 +1,14 @@
+# Build artifacts
+build/
+release/
+*.tar.gz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

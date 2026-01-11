@@ -1,0 +1,26 @@
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
+    ninja-build \
+    git \
+    wget \
+    python3 \
+    python3-pip \
+    pkg-config \
+    libncurses-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install CMake 3.22 (required by DX-RT)
+RUN wget -qO- https://cmake.org/files/v3.22/cmake-3.22.6-linux-x86_64.tar.gz | tar xz -C /opt && \
+    ln -s /opt/cmake-3.22.6-linux-x86_64/bin/cmake /usr/local/bin/cmake && \
+    ln -s /opt/cmake-3.22.6-linux-x86_64/bin/ctest /usr/local/bin/ctest
+
+WORKDIR /build
+
+CMD ["/bin/bash"]

@@ -1,0 +1,22 @@
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
+    make \
+    bc \
+    bison \
+    flex \
+    libssl-dev \
+    libelf-dev \
+    git \
+    wget \
+    kmod \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+CMD ["/bin/bash"]
