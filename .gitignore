@@ -1,0 +1,14 @@
+# Large directories
+dx_app_package/
+dx-all-suite/
+kernel-src/
+*.so
+*.a
+*.o
+*.deb
+*.tar.xz
+*.tar.gz
+*.tgz
+__pycache__/
+*.pyc
+.venv/
