@@ -2,6 +2,8 @@
 
 This repository provides automated scripts and documentation for installing the DeepX DX-M1 AI accelerator on the iMDT V2H Single Board Computer.
 
+<img width="595" height="511" alt="image" src="https://github.com/user-attachments/assets/15fe7031-17ff-419b-a70d-c588cc599106" />
+
 ## Hardware Requirements
 
 - **Board**: iMDT V2H SBC (Renesas RZ/V2H based)
