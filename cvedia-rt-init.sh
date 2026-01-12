@@ -38,7 +38,7 @@ case "$1" in
         fi
         cd $CVEDIA_DIR
         export LD_LIBRARY_PATH=$CVEDIA_DIR/lib:$CVEDIA_DIR:$LD_LIBRARY_PATH
-        nohup ./rtservice --webserver --log-console > $LOGFILE 2>&1 &
+        nohup ./rtservice --webserver --webserver-host 0.0.0.0 --webserver-port 8090 --log-console > $LOGFILE 2>&1 &
         sleep 3
         if is_running; then
             get_pid > $PIDFILE
