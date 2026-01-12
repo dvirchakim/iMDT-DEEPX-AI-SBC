@@ -12,35 +12,50 @@ CVEDIA_DIR=/opt/cvedia-rt
 PIDFILE=/var/run/cvedia-rt.pid
 LOGFILE=/var/log/cvedia-rt.log
 
-export LD_LIBRARY_PATH=$CVEDIA_DIR/lib:$CVEDIA_DIR:$LD_LIBRARY_PATH
-
 mount_partition() {
     if ! mountpoint -q /opt/cvedia-rt; then
         mkdir -p /opt/cvedia-rt
         mount /dev/mmcblk0p4 /opt/cvedia-rt
+        sleep 2
     fi
+}
+
+is_running() {
+    pgrep -f "rtservice" > /dev/null 2>&1
+}
+
+get_pid() {
+    pgrep -f "rtservice" 2>/dev/null | head -1
 }
 
 case "$1" in
     start)
         echo "Starting CVEDIA RT..."
         mount_partition
-        if [ -f $PIDFILE ]; then
-            echo "CVEDIA RT already running"
-            exit 1
+        if is_running; then
+            echo "CVEDIA RT already running (PID: $(get_pid))"
+            exit 0
         fi
         cd $CVEDIA_DIR
+        export LD_LIBRARY_PATH=$CVEDIA_DIR/lib:$CVEDIA_DIR:$LD_LIBRARY_PATH
         nohup ./rtservice --webserver --log-console > $LOGFILE 2>&1 &
-        echo $! > $PIDFILE
-        echo "CVEDIA RT started"
+        sleep 3
+        if is_running; then
+            get_pid > $PIDFILE
+            echo "CVEDIA RT started (PID: $(get_pid))"
+        else
+            echo "CVEDIA RT failed to start. Check $LOGFILE"
+            exit 1
+        fi
         ;;
     stop)
         echo "Stopping CVEDIA RT..."
-        if [ -f $PIDFILE ]; then
-            kill $(cat $PIDFILE) 2>/dev/null
-            rm -f $PIDFILE
-        fi
         pkill -f rtservice 2>/dev/null
+        rm -f $PIDFILE
+        sleep 2
+        if is_running; then
+            pkill -9 -f rtservice 2>/dev/null
+        fi
         echo "CVEDIA RT stopped"
         ;;
     restart)
@@ -49,10 +64,11 @@ case "$1" in
         $0 start
         ;;
     status)
-        if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
-            echo "CVEDIA RT is running"
+        if is_running; then
+            echo "CVEDIA RT is running (PID: $(get_pid))"
         else
             echo "CVEDIA RT is not running"
+            exit 1
         fi
         ;;
     *)
