@@ -1,0 +1,21 @@
+DeepX AI Deployment Package
+Version: 1.0
+Date: February 25, 2026
+Board: iMDT V2H SBC with DeepX M1 AI Accelerator
+
+Package Contents:
+- DeepX Runtime: v3.1.0
+- Firmware: v2.5.0
+- Drivers: v1.8.0 (RT), v1.6.0 (PCIe)
+- AI Models: 25 models (.dxnn format)
+- Kernel: 5.10.145-cip17-yocto-standard (aarch64)
+
+Total Package Size: ~832 MB
+
+Installation Time: ~5 minutes
+Expected Performance: 54+ FPS on YOLOv8N
+
+Auto-start: Enabled
+Reboot Required: Yes (after installation)
+
+For support and documentation, see README.md

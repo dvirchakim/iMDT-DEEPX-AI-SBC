@@ -1,0 +1,29 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build dependencies for DeepX runtime
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
+    make \
+    bc \
+    bison \
+    flex \
+    libssl-dev \
+    libelf-dev \
+    git \
+    wget \
+    curl \
+    kmod \
+    python3 \
+    python3-pip \
+    python3-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+CMD ["/bin/bash"]
