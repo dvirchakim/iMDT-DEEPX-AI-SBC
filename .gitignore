@@ -1,14 +1,14 @@
-# Build artifacts
-build/
-release/
+# Large directories
+dx_app_package/
+dx-all-suite/
+kernel-src/
+*.so
+*.a
+*.o
+*.deb
+*.tar.xz
 *.tar.gz
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+*.tgz
+__pycache__/
+*.pyc
+.venv/

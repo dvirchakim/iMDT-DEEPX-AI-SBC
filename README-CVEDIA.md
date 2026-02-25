@@ -1,9 +1,5 @@
 # CVEDIA RT Support for iMDT V2H SBC
 
-<img width="1826" height="830" alt="image" src="https://github.com/user-attachments/assets/1ab5e1de-3bcb-4bce-b066-026563f04bc9" />
-
-
-
 ## Overview
 This branch adds CVEDIA RT runtime support to the iMDT V2H SBC board.
 
